@@ -152,7 +152,7 @@ class target {
         double coordPolar[3];           //Target coordinates in spherical coordinates. 0 = azimuth position(deg), 1 = polar position(deg), 2 = range position(meter)
         double velocityVector[3];       //Target velocity components in cartesian form. 0 = x-velocity, 1 = y-velocity, 2 = z-velocity. (m/s)
         double accelerationVector[3];   //Target acceleration components in cartesian form. 0 = x-acceleration, 1 = y-acceleration, 2 = z-acceleration. (m/s^2)
-        double rcs;                     //Target RCS value (Radar-Cross-Section) (dB^2)
+        double rcs;                     //Target RCS value (Radar-Cross-Section) (dBm^2)
         double tempCoordXYZ[3];         //Used as a refrence/temporary coordinates. (meters)
         
 };

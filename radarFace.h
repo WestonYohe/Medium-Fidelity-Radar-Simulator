@@ -99,13 +99,13 @@ class radarFace {
       }
 
       //Sets face's minimum detectable SNR value for search detection
-      //Unit: dBm^s
+      //Unit: decible
       void setSNRmin(double snr){
          SNRmin = snr;
       }
 
       //Gets face's minimum detectable SNR value for search detection
-      //Unit dBm^2
+      //Unit decible
       double getSNRmin(){
          return SNRmin;
       }
@@ -198,13 +198,13 @@ class radarFace {
       }
 
       //Sets the SNR receieved from current search beam
-      //Unit: dBm^2
+      //Unit: decible
       void setReceivedSNR(double snr){
          receivedSNR = snr;
       }
 
       //Gets the SNR receieved from current search beam
-      //Unit: dBm^2
+      //Unit: decible
       double getReceivedSNR(){
          return receivedSNR;
       }

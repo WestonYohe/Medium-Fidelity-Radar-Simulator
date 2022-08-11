@@ -30,9 +30,9 @@ int main() {
     
    radar simRadar;
     test1.initializeInputData(simRadar);
-    simRadar.printSimInfo(simRadar);
-    //simRadar.startSimulation();
-    //test1.searchDataOutput(simRadar,"searchData.txt");
+    //simRadar.printSimInfo(simRadar);
+    simRadar.startSimulation();
+    //test1.searchDataOutput(simRadar,"outputFiles/searchData.txt");
     test1.closeInputFiles();
     
     return 0;

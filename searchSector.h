@@ -25,6 +25,8 @@ class searchSector {
 //Setter and getter related functions
 
     //Sets azimuth search extent and determines if the extent rolls over 360 degrees
+    //Input: begin= "leftmost" azimuth position. end = "rightmost" azimuth position
+    //Unit: degrees
     void setAzExtent(double begin, double end){
             azExtent[0] = begin; //leftmost position
             azExtent[1] = end;  //rightmost position
@@ -37,11 +39,15 @@ class searchSector {
     }
 
     //Gets azimuth search extent in either the leftmost or rightmost position
+    //Input: 0= "leftmost" azimuth position. 1 = "rightmost" azimuth position
+    //Unit: degrees
     double getAzExtent(int iter){
         return azExtent[iter];
     }
 
     //Sets elevation search extent
+    //Input: begin= lowest elevation position. end = highest elevation position
+    //Unit: degrees
     void setElExtent(double begin, double end){
         elExtent[0] = begin; //lowest position
         elExtent[1] = end; //highest position
@@ -49,11 +55,14 @@ class searchSector {
     }
 
     //Gets elevation extent in either lowest or hightest position
+    //Input: 0= lowest elevation position. 1 = highest elevation position
+    //Unit: degrees
     double getElExtent(int iter){
         return elExtent[iter];
     }
 
-    //Sets search range extent
+    //Sets search range minimum and maximum extent
+    //Units: kilometers
     void setRangeExtent(double minKm, double maxKm){
         //Converting from kilometers to meters
         rangeExtent[0] = utility::kiloToBase(minKm);
@@ -61,33 +70,41 @@ class searchSector {
     }
 
     //Gets range extent in either nearest or furthest position
+    //Input: 0 = minimum range extent. 1 = maximum range extent
+    //Unit: meters
     double getRangeExtent(int iter){
         return rangeExtent[iter];
     }
 
 
     //Sets refresh rate of search sector
+    //Units: seconds
     void setRefreshRate(double time){
         refreshRate = time;
     }
 
     //Gets refresh rate of search sector
+    //Units: seconds
     double getRefreshRate(){
         return refreshRate;
     }
 
     //Sets current scanning position of search beam within search sector
+    //Units: degrees
      void setScanPOS(double azimuth, double elevation){
         scanPOS[0] = azimuth;
         scanPOS[1] = elevation;
     }
 
     //Gets current scanning position in either azimuth or elevation position
+    //Input: 0 = azimuth scanning position. 1 = elevation scanning position.
+    //Units: degrees
     double getScanPOS(int iter){
         return scanPOS[iter];
     }
     
     //Gets sector's dwell time
+    //Unit: seconds
     double getDwellTime() {
         return dwellTime;
     }
@@ -98,13 +115,14 @@ class searchSector {
     }
 
     //Gets sectors angular search volume
+    //Unit: degrees^2
     double getAngularSearchVolume(){
         return angularSearchVolume;
     }
 ///////////////////////////////////////////////////////////////////////////////
 
-    //Initializes/calculates sectors angular search volume. Needed for dwell time calculation
-    void initializeSearchVolume(double az3db, double el3db){
+    //Initializes/calculates sectors angular search volume.
+    void initializeSearchVolume(){
         if(fovRollOver == false){
             angularSearchVolume = abs(azExtent[1]-azExtent[0]) * abs(elExtent[1]-elExtent[0]);
         }
@@ -113,7 +131,9 @@ class searchSector {
         }
     }
 
-    //Initializes/calculates sectors dwell time. az3db = azimuth search beam half-power-beamwidth. el3db = elevation search beam half-power-beamwidth.
+    //Initializes/calculates sectors dwell time.
+    //Inputs: az3db = azimuth search beam half-power-beamwidth. el3db = elevation search beam half-power-beamwidth.
+    //Units: degrees
     void initializeDwellTime(double az3db, double el3db){
         dwellTime = (refreshRate*az3db*el3db) / angularSearchVolume;
     }
@@ -142,7 +162,8 @@ class searchSector {
 
 
     //Function increments scanning position in search sector once search beams scans current position
-    //azInc = azimuth increment/displacement from current position. elInc = elevation increment/displacement from current position.
+    //Input: azInc = azimuth increment/displacement from current position. elInc = elevation increment/displacement from current position.
+    //Units: degrees
     void incrementBeamPos(double azInc, double elInc){
 
         //If statement is used to determine if azimuth extent rolls over 360, which leads to slight differing arithmetic
@@ -177,13 +198,13 @@ class searchSector {
     }
 
 private:
-    double azExtent[2];         //Search extent in azimuth frame. 0 = leftmost or furtherest counterclockwise position. 1 = rightmost or furthest clockwise position
-    double elExtent[2];         //Search extent in elevation frame. 0 = lowest elevation position. 1 = highest elevation posistion
-    double rangeExtent[2];      //Searching range extent. 0 = closest position. 1 = furthest position.
-    double refreshRate;         //Time it takes to search the entire search sector.
-    double angularSearchVolume; //The angular search volume of the search sector
-    double dwellTime;           //Time a search beam spends in one scanning position.
-    double scanPOS[2];          //Current scanning position. 0 = azimuth position. 1 = elvation position.
+    double azExtent[2];         //Search extent in azimuth frame. 0 = leftmost or furtherest counterclockwise position. 1 = rightmost or furthest clockwise position. (degrees)
+    double elExtent[2];         //Search extent in elevation frame. 0 = lowest elevation position. 1 = highest elevation posistion. (degrees)
+    double rangeExtent[2];      //Searching range extent. 0 = closest position. 1 = furthest position. (meters)
+    double refreshRate;         //Time it takes to search the entire search sector. (seconds)
+    double angularSearchVolume; //The angular search volume of the search sector. (degrees^2)
+    double dwellTime;           //Time a search beam spends in one scanning position. (seconds)
+    double scanPOS[2];          //Current scanning position. 0 = azimuth position. 1 = elvation position. (degrees)
     bool fovRollOver;           //boolean used if the azimuth search extent rolls over 360 degrees.  Example-> extent from 345degrees to 45degrees.
 
 };

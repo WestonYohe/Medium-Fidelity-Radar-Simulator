@@ -1,7 +1,7 @@
 /*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  * Unclassified
  * Coder: Weston Yohe
- * Last Modified: 8/10/2022
+ * Last Modified: 8/11/2022
  * Description: radar.h contains the physical properties/characteristics and fucntionality (search,detect,track) of the radar system being simulated.
  *              radar.h also contains the function, StartSim(), which starts the simulation. Once StartSim() is called, radar.h uses all simulation files
  *              to gather the data/information needed to run the simulation. Thus, radar.h acts as a hub for simulation data.
@@ -47,33 +47,43 @@ class radar {
       }
 
       //Sets length of simulated time simulation will run
+      //Units: Minutes
       void setSimLength(double time){
          simLength = 60*time; //Converted from minutes to seconds
       }
 
       //Returns length of simulated time simulation will run
+      //Unit: seconds
       double getSimLength(){
          return simLength;
       }
 
       //Sets Tracker PRF
+      //Units: Gigahertz
        void setTrackPRF(double kiloHertz){
         trackPRF = utility::kiloToBase(kiloHertz);
       }
+
       //Returns tracker prf
+      //Units: hertz
       double getTrackPRF(){
          return trackPRF;
       }
       //Sets minimum SNR needed for tracker detection
+      //Units:  decible
       void setTrackingSNRmin(double snr){
          trackingSNRmin = snr;
       }
+
       //Gets minimum SNR needed for tracker detection
+      //Unit: decible
       double getTrackingSNRmin(){
          return trackingSNRmin;
       }
 
       //Sets weighted parameters for alpha-beta-gamma tracking filter
+      //Inputs: double array[3]. 0 = Alpha. 1 = Beta. 2 = Gamma
+      //Units: unitless
       void setA_B_gammaWeights(double weights[3]){
          A_B_gammaWeights[0] = weights[0];  //Alpha
          A_B_gammaWeights[1] = weights[1];  //Beta
@@ -81,6 +91,8 @@ class radar {
       }
 
       //Gets weighted parameters for alpha-beta-gamma tracking filter
+      //Inputs: 0 = Alpha. 1 = Beta. 2 = Gamma
+      //Unit: unitless
       double getA_B_gammaWeights(int iter){
          return A_B_gammaWeights[iter];
       }
@@ -91,22 +103,27 @@ class radar {
       }
 
       //Gets refreshRate of simulated time frames/intervals
+      //Unit: seconds
       double getRefreshRate(){
          return refreshRate;
       }
 
       //Sets tracker halfpower beamwidth in azimuth and elevation
+      //Input double array[2]. 0 = azimuth halfpower beamwidth. 1 = elevation halfpower beamwidth
+      //Units: degrees
       void setTrackBeamwidth(double beamwidths[2]){
          trackBeamWidth[0] = beamwidths[0]; //azimuth halfpower beamwidth
          trackBeamWidth[1] = beamwidths[1];  //elevation halfpower beamwidth
       }
 
       //Gets tracker halfpower beamwidth or azimuth and elevation
+      //Input: 0 = azimuth halfpower beamwidth. 1 = elevation halfpower beamwidth
+      //Units: degrees
       double getTrackBeamwidth(int iter){
          return trackBeamWidth[iter];
       }
 
-   //Getters below are for configurationManager which is used to display all search detection data to user in specified .txt file
+//////Getters below are for configurationManager which is used to display all search detection data to user in specified .txt file
 
       //Gets vector with all search detection times
       vector<double> getSearchDetectTimeVector(){
@@ -371,17 +388,18 @@ class radar {
                   a tracking detection is made and the tracker is updated.
    
    TO-DO: It seems like tracker randomly looses track on some targets with higher velocity and acceleration, even if the target still meets
-         all criteria. The azimuth rollover logic below may be the issue. 
+         all criteria. The azimuth rollover logic below may be the issue or the tracker algorithm. 
 
 *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      
       bool trackDetection(tracker* track){
-         target* trackedTarget = track->getTarget();
-         for(int faceIter = 0; faceIter < faceVector.size(); faceIter++){
-             if(trackSNR(faceVector[faceIter],trackedTarget) >= trackingSNRmin){
-               if((trackedTarget->getCoordPolar(0) >= (track->getNextScanPos(0) - (trackBeamWidth[0]/2)))  && (trackedTarget->getCoordPolar(0) <= (track->getNextScanPos(0) +(trackBeamWidth[0]/2)))) { //azimuth beam
-                  if(((trackedTarget->getCoordPolar(1) <= track->getNextScanPos(1) + ((trackBeamWidth[1]/2))) && (trackedTarget->getCoordPolar(1) >= track->getNextScanPos(1)-(trackBeamWidth[1]/2)))){  //elevation beam
-                     if(trackedTarget->getCoordPolar(1) >= faceVector[faceIter]->getElExtent(0) && trackedTarget->getCoordPolar(1) <= faceVector[faceIter]->getElExtent(1)){     
+         target* trackedTarget = track->getTarget(); //Obtaining target from tracker profile
+         for(int faceIter = 0; faceIter < faceVector.size(); faceIter++){ //Simulating criteria for all radar faces
+             if(trackSNR(faceVector[faceIter],trackedTarget) >= trackingSNRmin){   //SNR criteria
+               if((trackedTarget->getCoordPolar(0) >= (track->getNextScanPos(0) - (trackBeamWidth[0]/2)))  && (trackedTarget->getCoordPolar(0) <= (track->getNextScanPos(0) +(trackBeamWidth[0]/2)))) { //inside track beam (azimuth) criteria
+                  if(((trackedTarget->getCoordPolar(1) <= track->getNextScanPos(1) + ((trackBeamWidth[1]/2))) && (trackedTarget->getCoordPolar(1) >= track->getNextScanPos(1)-(trackBeamWidth[1]/2)))){  //inside track beam (elevation) criteria
+                     if(trackedTarget->getCoordPolar(1) >= faceVector[faceIter]->getElExtent(0) && trackedTarget->getCoordPolar(1) <= faceVector[faceIter]->getElExtent(1)){ //inside radar face's elevation FOV criteria   
+                        //Determining if target is inside radar face's azimuth FOV 
+                        //If statment is used due to logic differing if target is in an FOV that "rollsover" 360 degrees azimuth. (MAY BE CAUSING ACCURACY PROBLEMS)
                         if(faceVector[faceIter]->getFovRollOverBool() == true){
                            if(trackedTarget->getCoordPolar(0) <= faceVector[faceIter]->getAzExtent(0) && trackedTarget->getCoordPolar(0) <= faceVector[faceIter]->getAzExtent(1)){
                               return true;
@@ -403,8 +421,12 @@ class radar {
 
 
 
-      //Function contains the "track" form of the Radar Range Equation (RRE) to determine received SNR in units of decible
+      //Function uses the "track" form of the Radar Range Equation (RRE) to determine received SNR in units of decible
       double trackSNR(radarFace* face, target* target){
+
+         //20*log10(face->getEffectiveAttenaArea() /3283) converts EffectiveAttenaArea() from m^2 to steradian then to dB (CHECK IF ACCURATE)
+         //10*log10(290) is converting standard temperature (kelvin) to dB
+         //10*log10(1.38*pow(10,-23)) is Boltzmann's constant to dB
          double snr = 10*log10(face->getPeakPower())  + 20*log10(face->getEffectiveAttenaArea() /3283) + target->getRCS()
           - 30*log10(3.14*4) - 40*log10(target->getCoordPolar(2)) - 10*log10(1.38*pow(10,-23)) - 10*log10(290) -  face->getTotalSysLoss() - face->getNoiseFigure() - 20*log10(face->getWavelength());
          face->setReceivedSNR(snr);
@@ -413,6 +435,10 @@ class radar {
       
       //Function contains the "search" form of the Radar Range Equation (RRE) to determine received SNR in units of decible
       double searchSNR(radarFace* face, searchSector* sector, target* target){
+
+         //20*log10(face->getEffectiveAttenaArea() /3283) converts EffectiveAttenaArea() from m^2 to steradian then to dB (CHECK IF ACCURATE)
+         //10*log10(290) is converting standard temperature (kelvin) to dB
+         //10*log10(1.38*pow(10,-23)) is Boltzmann's constant to dB
          double snr = 10*log10(face->getPowerAvg()) + 10*log10(face->getEffectiveAttenaArea()/3283) + 10*log10(sector->getRefreshRate()) + target->getRCS()
           - 10*log10(3.14*4) - 10*log10(sector->getAngularSearchVolume() /3283) - 40*log10(target->getCoordPolar(2)) - 10*log10(1.38*pow(10,-23)) - 10*log10(290) -  face->getTotalSysLoss() - face->getNoiseFigure();
           face->setReceivedSNR(snr);
@@ -503,13 +529,13 @@ class radar {
          vector<radarFace*> faceVector;   //Contains all the radar face objects in current radar simulation
          vector<target*> targetVector;    //Contains all target objects simulate in current simulation
          vector<tracker*> trackVector;    //Contains all tracking profiles
-         double simLength;                //Simulated time spent running simulation
-         double time;                     //Current simulation time
-         double refreshRate;              //Time simulation spends in a frame of refrence
-         double trackBeamWidth[2];        //HalfPower beamwidth used for tracking. 0 = azimuth beamwidth. 1 = elevation beamwidth
-         double trackPRF;                 //Theoretical amount of scans used in tracking per second
-         double trackingSNRmin;           //Floor threshold for Signal-to-Noise ratio during tracking
-         double A_B_gammaWeights[3];      //Alpha-Beta-Gamma weights for tracking filter. 0 = alpha. 1 = beta. 2 = gamma.
+         double simLength;                //Simulated time spent running simulation. (Seconds)
+         double time;                     //Current simulation time. (Seconds)
+         double refreshRate;              //Time simulation spends in a frame of refrence. (Seconds)
+         double trackBeamWidth[2];        //HalfPower beamwidth used for tracking. 0 = azimuth beamwidth. 1 = elevation beamwidth. (Degrees)
+         double trackPRF;                 //Theoretical amount of scans used in tracking per second. (Hertz)
+         double trackingSNRmin;           //Floor threshold for Signal-to-Noise ratio during tracking. (dB)
+         double A_B_gammaWeights[3];      //Alpha-Beta-Gamma weights for tracking filter. 0 = alpha. 1 = beta. 2 = gamma. (unitless)
          
          //Variables used for outputting information
          int possibleDetections;                   //Holds all detections from search

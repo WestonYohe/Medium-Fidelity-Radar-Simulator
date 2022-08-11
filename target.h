@@ -1,7 +1,7 @@
 /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  * Unclassified
  * Coder: Weston Yohe
- * Last Modified: 8/10/2022
+ * Last Modified: 8/11/2022
  * Description: target.h contains the properties/characteristics of the targets used in the radar simulation. Such as
  *              target's RCS (Radar-Cross-Section), position, velocity, and acceleration. Additionally, there is logic
  *              to update/change the targets location using basic laws of motion equaitons. Currently target's
@@ -147,13 +147,13 @@ class target {
         }
 
     private:
-        double startPos[3];             //Target initial starting coordinates in cartesian form. 0 = x-position, 1 = y-position, 2 = z-position
-        double coordXYZ[3];             //Target coordinates in cartesian coordinates. 0 = x-position, 1 = y-position, 2 = z-position
-        double coordPolar[3];           //Target coordinates in spherical coordinates. 0 = azimuth position(deg), 1 = polar position(deg), 2 = range position
-        double velocityVector[3];       //Target velocity components in cartesian form. 0 = x-velocity, 1 = y-velocity, 2 = z-velocity
-        double accelerationVector[3];   //Target acceleration components in cartesian form. 0 = x-acceleration, 1 = y-acceleration, 2 = z-acceleration
-        double rcs;                     //Target RCS value (Radar-Cross-Section)
-        double tempCoordXYZ[3];         //Used as a refrence/temporary coordinates
+        double startPos[3];             //Target initial starting coordinates in cartesian form. 0 = x-position, 1 = y-position, 2 = z-position. (meters)
+        double coordXYZ[3];             //Target coordinates in cartesian coordinates. 0 = x-position, 1 = y-position, 2 = z-position. (meters)
+        double coordPolar[3];           //Target coordinates in spherical coordinates. 0 = azimuth position(deg), 1 = polar position(deg), 2 = range position(meter)
+        double velocityVector[3];       //Target velocity components in cartesian form. 0 = x-velocity, 1 = y-velocity, 2 = z-velocity. (m/s)
+        double accelerationVector[3];   //Target acceleration components in cartesian form. 0 = x-acceleration, 1 = y-acceleration, 2 = z-acceleration. (m/s^2)
+        double rcs;                     //Target RCS value (Radar-Cross-Section) (dB^2)
+        double tempCoordXYZ[3];         //Used as a refrence/temporary coordinates. (meters)
         
 };
 

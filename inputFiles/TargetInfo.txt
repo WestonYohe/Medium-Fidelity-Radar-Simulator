@@ -1,0 +1,15 @@
+Target 1 coordinates[x,y,z](km relative to boresight):51.22,13.725,53
+Target 1 velocity[x,y,z](m/s): 100,0,0
+Target 1 acceleration[x,y,z](m/s^2): 0,0,0
+Target 1 RCS[DBsm]: 1
+-----------------------------------------------------------------
+Target 2 coordinates[x,y,z](km relative to boresight):-26.516,45.927,53.033
+Target 2 velocity[x,y,z](m/s): -50,100,0
+Target 2 acceleration[x,y,z](m/s^2): 0,60,0
+Target 2 RCS[DBsm]: 1
+-----------------------------------------------------------------
+Target 3 coordinates[x,y,z](km relative to boresight):-27.516,45.927,53.033
+Target 3 velocity[x,y,z](m/s): 100,0,0
+Target 3 acceleration[x,y,z](m/s^2): 45,0,0
+Target 3 RCS[DBsm]: 1
+-----------------------------------------------------------------

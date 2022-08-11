@@ -1,0 +1,44 @@
+Boresight[azimuth,elevation](deg,deg): 0,45
+FovAzExtent[clockwise](deg,deg): 300,60
+FovElExtent[downToUp](deg,deg): 0,90
+3dbBeamwidth[az,el](deg,deg): 5,5
+DetectableSNRmin: 0
+WaveFrequency[Ghz]: 90
+Bandwidth(kHz): 30
+EffectiveAttenaArea(m^2): 5
+PeakPower(kW): 150
+NoiseFigure[dB]: 2.5
+TotalSystemLoss[dB]: 9
+AmountSearchSectors: 3
+-----------------------------------------------------------
+Boresight[azimuth,elevation](deg,deg): 120,45
+FovAzExtent[clockwise](deg,deg): 240,180
+FovElExtent[downToUp](deg,deg): 0,90
+3dbBeamwidth[az,el](deg,deg): 5,5
+DetectableSNRmin: 0
+WaveFrequency[Ghz]: 90
+Bandwidth(kHz): 30
+EffectiveAttenaArea(m^2): 5
+PeakPower(kW): 150
+NoiseFigure[dB]: 2.5
+TotalSystemLoss[dB]: 9
+AmountSearchSectors: 3
+-----------------------------------------------------------
+Boresight[azimuth,elevation](deg,deg): 270,45
+FovAzExtent[clockwise](deg,deg): 180,300
+FovElExtent[downToUp](deg,deg): 0,90
+3dbBeamwidth[az,el](deg,deg): 5,5
+DetectableSNRmin: 0
+WaveFrequency[Ghz]: 90
+Bandwidth(kHz): 30
+EffectiveAttenaArea(m^2): 5
+PeakPower(kW): 150
+NoiseFigure[dB]: 2.5
+TotalSystemLoss[dB]: 9
+AmountSearchSectors: 3
+-----------------------------------------------------------
+
+
+
+
+

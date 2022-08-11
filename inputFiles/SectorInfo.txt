@@ -1,0 +1,45 @@
+1.1AzExtent[clockwise](deg,deg): 300,340
+ElExtent[downToUp](deg,deg): 0,90
+RangeExtent[min,max](Km): 0,200
+refreshRate(sec): 10
+-----------------------------------------------------
+1.2AzExtent[clockwise](deg,deg): 340,20
+ElExtent[downToUp](deg,deg): 0,90
+RangeExtent[min,max](Km): 0,200
+refreshRate(sec): 11
+-----------------------------------------------------
+1.3AzExtent[clockwise](deg,deg): 20,60
+ElExtent[downToUp](deg,deg): 0,90
+RangeExtent[min,max](Km): 0,200
+refreshRate(sec): 12
+-----------------------------------------------------
+2.0AzExtent[clockwise](deg,deg): 60,100
+ElExtent[downToUp](deg,deg): 0,90
+RangeExtent[min,max](Km): 0,200
+refreshRate(sec): 8
+-----------------------------------------------------
+2.1AzExtent[clockwise](deg,deg): 100,140
+ElExtent[downToUp](deg,deg): 0,90
+RangeExtent[min,max](Km): 0,200
+refreshRate(sec): 8
+-----------------------------------------------------
+2.2AzExtent[clockwise](deg,deg): 140,180
+ElExtent[downToUp](deg,deg): 0,90
+RangeExtent[min,max](Km): 0,200
+refreshRate(sec): 7
+-----------------------------------------------------
+3.0AzExtent[clockwise](deg,deg): 180,220
+ElExtent[downToUp](deg,deg): 0,90
+RangeExtent[min,max](Km): 0,200
+refreshRate(sec): 13
+-----------------------------------------------------
+3.1AzExtent[clockwise](deg,deg): 220,260
+ElExtent[downToUp](deg,deg): 0,90
+RangeExtent[min,max](Km): 0,200
+refreshRate(sec): 6
+-----------------------------------------------------
+3.2AzExtent[clockwise](deg,deg): 260,300
+ElExtent[downToUp](deg,deg): 0,90
+RangeExtent[min,max](Km): 0,200
+refreshRate(sec): 10
+-----------------------------------------------------

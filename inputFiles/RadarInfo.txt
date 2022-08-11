@@ -1,0 +1,9 @@
+AmountOfRadarFace: 3
+NumberOfTargetsSimulated: 3
+TrackingPRF(kHz): 2
+TrackingSNRmin(dB): 0
+TrackingBeamWidths(deg)[az,el]: 3, 3
+FilterWeights[a,b,gamma]: .3,.4,1
+SimulationRefreshRate(sec): 1
+SimulationRunTime(mins): 270
+---------------------------------------

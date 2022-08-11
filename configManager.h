@@ -263,7 +263,7 @@ class configManager {
 
                 //Initialize functions
                 //Search Volume
-                sectorVector[j]->initializeSearchVolume(faceVector[i]->getHalfPowerBeamWidth(0), faceVector[i]->getHalfPowerBeamWidth(1));
+                sectorVector[j]->initializeSearchVolume();
                 //Dwell
                 sectorVector[j]->initializeDwellTime(faceVector[i]->getHalfPowerBeamWidth(0), faceVector[i]->getHalfPowerBeamWidth(1));
                 //Random scan pos

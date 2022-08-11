@@ -424,24 +424,25 @@ class radar {
       //Function uses the "track" form of the Radar Range Equation (RRE) to determine received SNR in units of decible
       double trackSNR(radarFace* face, target* target){
 
-         //20*log10(face->getEffectiveAttenaArea() /3283) converts EffectiveAttenaArea() from m^2 to steradian then to dB (CHECK IF ACCURATE)
          //10*log10(290) is converting standard temperature (kelvin) to dB
          //10*log10(1.38*pow(10,-23)) is Boltzmann's constant to dB
-         double snr = 10*log10(face->getPeakPower())  + 20*log10(face->getEffectiveAttenaArea() /3283) + target->getRCS()
+         double snr = 10*log10(face->getPeakPower())  + 20*log10(face->getEffectiveAttenaArea()) + target->getRCS()
           - 30*log10(3.14*4) - 40*log10(target->getCoordPolar(2)) - 10*log10(1.38*pow(10,-23)) - 10*log10(290) -  face->getTotalSysLoss() - face->getNoiseFigure() - 20*log10(face->getWavelength());
          face->setReceivedSNR(snr);
+         
          return snr;
       }
       
       //Function contains the "search" form of the Radar Range Equation (RRE) to determine received SNR in units of decible
       double searchSNR(radarFace* face, searchSector* sector, target* target){
 
-         //20*log10(face->getEffectiveAttenaArea() /3283) converts EffectiveAttenaArea() from m^2 to steradian then to dB (CHECK IF ACCURATE)
+         //10*log10(sector->getAngularSearchVolume() /3283) from degrees^2 to steradian then to dB
          //10*log10(290) is converting standard temperature (kelvin) to dB
          //10*log10(1.38*pow(10,-23)) is Boltzmann's constant to dB
-         double snr = 10*log10(face->getPowerAvg()) + 10*log10(face->getEffectiveAttenaArea()/3283) + 10*log10(sector->getRefreshRate()) + target->getRCS()
-          - 10*log10(3.14*4) - 10*log10(sector->getAngularSearchVolume() /3283) - 40*log10(target->getCoordPolar(2)) - 10*log10(1.38*pow(10,-23)) - 10*log10(290) -  face->getTotalSysLoss() - face->getNoiseFigure();
+         double snr = 10*log10(face->getPowerAvg()) + 10*log10(face->getEffectiveAttenaArea()) + 10*log10(sector->getRefreshRate()) + target->getRCS()
+          - 10*log10(3.14*4) - 10*log10(sector->getAngularSearchVolume()/3283) - 40*log10(target->getCoordPolar(2)) - 10*log10(1.38*pow(10,-23)) - 10*log10(290) -  face->getTotalSysLoss() - face->getNoiseFigure();
           face->setReceivedSNR(snr);
+          
          return snr;
       }
 

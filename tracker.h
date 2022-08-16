@@ -45,7 +45,7 @@ class tracker {
 
     //Function intializes tracking filter to give a rough estimation on targets next cartesian and spherical position
     //Units: seconds
-    //TO_DO: Rearrange confirmation scanning beam timing so assumedValuesCalculation() can provide actual guess velocity and acceleration values
+    //TO_DO: Rearrange confirmation scanning beam timing so assumedValuesCalculation() can provide actual assumed velocity and acceleration values
     void filterInit(double time){
         
         initial_current_time[1] = time;
@@ -66,11 +66,11 @@ class tracker {
         
          //Estimating the targets rough next position from assumed values and displacement in time
          for(int i = 0; i < 3; i++){
-            //x,y,z prediction
+            //x,y,z estimate
             estXYZ[i] = currXYZ[i] + (assumedVel[i]*deltaTime)+ (0.5*assumedAcc[i]*pow(deltaTime,2));
-            //Vx,Vy,Vz prediction
+            //Vx,Vy,Vz estimate
             estVxVyVz[i] = assumedVel[i] + (assumedAcc[i]*deltaTime);
-            //Ax,Ay,Az prediction
+            //Ax,Ay,Az estimate
             estAxAyAz[i] = assumedAcc[i];
          }
          
@@ -101,11 +101,11 @@ class tracker {
 
         double measuredXYZ[3] = {target->getCoordXYZ(0), target->getCoordXYZ(1), target->getCoordXYZ(2)}; //"measured" target coordinates. 
             
-         //Estimating targets next cartesian position, velocity and acceleration components
+         //Estimating targets next cartesian position, velocity and acceleration components using tracking filters
          for(int i = 0; i < 3; i++){
-            estXYZ[i] = currXYZ[i] + A_B_GammaWeights[0]*(measuredXYZ[i]-currXYZ[i]);
-            estVxVyVz[i] = currVxVyVz[i] + A_B_GammaWeights[1]*((measuredXYZ[i]-currXYZ[i])/deltaTime);
-            estAxAyAz[i] = currAxAyAz[i] + A_B_GammaWeights[2]*((measuredXYZ[i]-currXYZ[i])/deltaTime);
+            estXYZ[i] = currXYZ[i] + A_B_GammaWeights[0]*(measuredXYZ[i]-currXYZ[i]);                   //Alpha weight
+            estVxVyVz[i] = currVxVyVz[i] + A_B_GammaWeights[1]*((measuredXYZ[i]-currXYZ[i])/deltaTime); //Beta weight
+            estAxAyAz[i] = currAxAyAz[i] + A_B_GammaWeights[2]*((measuredXYZ[i]-currXYZ[i])/deltaTime); //Gamma weight
          }
           
         //Converting estimated cartesian coordinates to sphereical coordinates
@@ -123,30 +123,40 @@ class tracker {
          
       }
 
-
+        //Gets scanning position of track beam
+        //Input: 0 = azimuth. 1 = elevation
+        //Units: degrees
         double getNextScanPos(int iter){
             return nextScanPosition[iter];
         }
 
+        //Sets active track bool so begin tracking process
         void setActiveTrackBool(bool logic){
             activeTrack = logic;
         }
 
+        //Gets active track bool which determines if tracking profile is in current track
         bool getActivTrackBool(){
             return activeTrack;
         }
 
+        //Converts future cartesian position estimation to current cartesian position estimation
         void estXYZtoCurrXYZ(){
             for(int i = 0; i < 3; i++){
                 currXYZ[i] = estXYZ[i];
             }
         }
 
+        //Gets target object which is being tracked
         target* getTarget(){
             return target;
         }
 
-        //Currently reduntant due to instananeous confirmation beam->target has no displacement under current conditions
+
+        //Calculates rough assumptions of targets veocity and acceleration components after initiating track profile
+        //Inputs: deltaTime = time from search beam detection to confirmation tracking beam detection
+        //Units: seconds
+        //TO-DO: Currently reduntant due to instananeous confirmation beam after searach detection->target has no displacement under current conditions
         void assumedValuesCalculation(double deltaTime){
             for(int iter = 0; iter < 3; iter++){
                 double displacement = targetConfirmXYZ[iter] - targetConfirmXYZ[iter];

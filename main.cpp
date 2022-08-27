@@ -16,7 +16,7 @@
  *                Going forward, simulator fidelity needs to be improved by implementing more radar functionality,
  *                along with, improving searching, detection and tracking algorithms. 
  * 
- *                Updated source code, along with a PDF file (WORK IN PORGRESS) that documents the program in further detail,
+ *                Updated source code, along with a PDF file documenting the program in further detail,
  *                can be found on at this GitHub repository:
  *                https://github.com/WestonYohe/Medium-Fidelity-Radar-Simulator
  
